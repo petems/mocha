@@ -43,10 +43,8 @@ module Mocha
           @original_method = original_method(method_name)
           if RUBY_V2_PLUS
             prepend_module
-          else
-            if original_method_defined_on_stubbee?
-              remove_original_method_from_stubbee
-            end
+          elsif original_method_defined_on_stubbee?
+            remove_original_method_from_stubbee
           end
         rescue NameError
           # deal with nasties like ActiveRecord::Associations::AssociationProxy
