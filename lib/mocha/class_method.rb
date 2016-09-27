@@ -40,7 +40,7 @@ module Mocha
     def hide_original_method
       if @original_visibility = method_visibility(method)
         begin
-          @original_method = stubbee._method(method)
+          @original_method = original_method(method)
           if RUBY_V2_PLUS
             @definition_target = PrependedModule.new
             stubbee.__metaclass__.__send__ :prepend, @definition_target
@@ -109,6 +109,10 @@ module Mocha
     end
 
     private
+
+    def original_method(method)
+      stubbee._method(method)
+    end
 
     def definition_target
       @definition_target ||= stubbee.__metaclass__
