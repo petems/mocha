@@ -13,13 +13,6 @@ module Mocha
       stubbee.any_instance.reset_mocha
     end
 
-    def define_new_method
-      definition_target.class_eval(stubbed_method_implementation, __FILE__, __LINE__ + 1)
-      if @original_visibility
-        Module.instance_method(@original_visibility).bind(definition_target).call(method)
-      end
-    end
-
     def remove_new_method
       definition_target.send(:remove_method, method)
     end
