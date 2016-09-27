@@ -42,8 +42,7 @@ module Mocha
         begin
           @original_method = original_method(method)
           if RUBY_V2_PLUS
-            @definition_target = PrependedModule.new
-            stubbee.__metaclass__.__send__ :prepend, @definition_target
+            prepend_module
           else
             if @original_method && @original_method.owner == stubbee.__metaclass__
               stubbee.__metaclass__.send(:remove_method, method)
@@ -112,6 +111,11 @@ module Mocha
 
     def original_method(method)
       stubbee._method(method)
+    end
+
+    def prepend_module
+      @definition_target = PrependedModule.new
+      stubbee.__metaclass__.__send__ :prepend, @definition_target
     end
 
     def definition_target
