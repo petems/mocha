@@ -13,10 +13,6 @@ module Mocha
       stubbee.any_instance.reset_mocha
     end
 
-    def remove_new_method
-      definition_target.send(:remove_method, method)
-    end
-
     def restore_original_method
       unless RUBY_V2_PLUS
         if @original_method && @original_method.owner == stubbee
