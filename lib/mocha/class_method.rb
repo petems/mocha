@@ -41,13 +41,13 @@ module Mocha
       if @original_visibility = method_visibility(method_name)
         begin
           store_original_method
-          if use_prepended_module_for_stub_method?
-            use_prepended_module_for_stub_method
-          elsif original_method_defined_on_stubbee?
-            remove_original_method_from_stubbee
-          end
         rescue NameError
           # deal with nasties like ActiveRecord::Associations::AssociationProxy
+        end
+        if use_prepended_module_for_stub_method?
+          use_prepended_module_for_stub_method
+        elsif original_method_defined_on_stubbee?
+          remove_original_method_from_stubbee
         end
       end
     end
