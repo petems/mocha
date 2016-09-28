@@ -40,7 +40,7 @@ module Mocha
     def hide_original_method
       if @original_visibility = method_visibility(method_name)
         begin
-          @original_method = original_method(method_name)
+          @original_method = original_method
           if RUBY_V2_PLUS
             use_prepended_module_for_stub_method
           elsif original_method_defined_on_stubbee?
@@ -103,7 +103,7 @@ module Mocha
 
     private
 
-    def original_method(method_name)
+    def original_method
       stubbee._method(method_name)
     end
 
