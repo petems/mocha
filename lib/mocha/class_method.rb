@@ -42,7 +42,7 @@ module Mocha
         begin
           @original_method = original_method(method_name)
           if RUBY_V2_PLUS
-            prepend_module
+            use_prepended_module_for_stub_method
           elsif original_method_defined_on_stubbee?
             remove_original_method_from_stubbee
           end
@@ -115,7 +115,7 @@ module Mocha
       default_stub_method_owner.send(:remove_method, method_name)
     end
 
-    def prepend_module
+    def use_prepended_module_for_stub_method
       @stub_method_owner = PrependedModule.new
       default_stub_method_owner.__send__ :prepend, @stub_method_owner
     end
