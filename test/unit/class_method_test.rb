@@ -3,6 +3,7 @@ require 'method_definer'
 require 'mocha/mock'
 
 require 'mocha/class_method'
+require 'mocha/object_methods'
 
 class ClassMethodTest < Mocha::TestCase
 
