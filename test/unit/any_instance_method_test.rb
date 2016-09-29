@@ -2,6 +2,7 @@ require File.expand_path('../../test_helper', __FILE__)
 require 'method_definer'
 require 'mocha/mock'
 require 'mocha/any_instance_method'
+require 'mocha/object_methods'
 
 class AnyInstanceMethodTest < Mocha::TestCase
 
