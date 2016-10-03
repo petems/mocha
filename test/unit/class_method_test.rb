@@ -11,7 +11,7 @@ class ClassMethodTest < Mocha::TestCase
 unless RUBY_V2_PLUS
   def test_should_hide_original_method
     klass = Class.new { def self.method_x; end }
-    klass.define_instance_method(:_method) { |args| method(args) }
+    klass.__metaclass__.send(:alias_method, :_method, :method)
     method = ClassMethod.new(klass, :method_x)
 
     method.hide_original_method
@@ -60,7 +60,7 @@ end
 
   def test_should_restore_original_method
     klass = Class.new { def self.method_x; :original_result; end }
-    klass.define_instance_method(:_method) { |args| method(args) }
+    klass.__metaclass__.send(:alias_method, :_method, :method)
     method = ClassMethod.new(klass, :method_x)
 
     method.hide_original_method
@@ -74,7 +74,7 @@ end
 
   def test_should_restore_original_method_accepting_a_block_parameter
     klass = Class.new { def self.method_x(&block); block.call if block_given? ; end }
-    klass.define_instance_method(:_method) { |args| method(args) }
+    klass.__metaclass__.send(:alias_method, :_method, :method)
     method = ClassMethod.new(klass, :method_x)
 
     method.hide_original_method
