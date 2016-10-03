@@ -124,7 +124,7 @@ end
     method = ClassMethod.new(klass, :method_x)
     mocha = build_mock
     klass.define_instance_method(:mocha) { mocha }
-    klass.define_instance_method(:reset_mocha) {}
+    method.define_instance_method(:reset_mocha) {}
     method.define_instance_accessor(:remove_called)
     method.replace_instance_method(:remove_new_method) { self.remove_called = true }
 
@@ -137,8 +137,8 @@ end
     klass = Class.new { def self.method_x; end }
     mocha = build_mock
     klass.define_instance_method(:mocha) { mocha }
-    klass.define_instance_method(:reset_mocha) {}
     method = ClassMethod.new(klass, :method_x)
+    method.define_instance_method(:reset_mocha) {}
     method.define_instance_accessor(:restore_called)
     method.replace_instance_method(:restore_original_method) { self.restore_called = true }
 
