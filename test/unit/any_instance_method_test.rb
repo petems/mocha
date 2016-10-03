@@ -2,7 +2,6 @@ require File.expand_path('../../test_helper', __FILE__)
 require 'method_definer'
 require 'mocha/mock'
 require 'mocha/any_instance_method'
-require 'mocha/object_methods'
 
 class AnyInstanceMethodTest < Mocha::TestCase
 
@@ -75,6 +74,7 @@ class AnyInstanceMethodTest < Mocha::TestCase
     klass.define_instance_method(:any_instance) { any_instance }
     method = AnyInstanceMethod.new(klass, :method_x)
     method.replace_instance_method(:restore_original_method) { }
+    method.replace_instance_method(:reset_mocha) {}
     method.define_instance_accessor(:remove_called)
     method.replace_instance_method(:remove_new_method) { self.remove_called = true }
 
@@ -91,6 +91,7 @@ class AnyInstanceMethodTest < Mocha::TestCase
     klass.define_instance_method(:any_instance) { any_instance }
     method = AnyInstanceMethod.new(klass, :method_x)
     method.replace_instance_method(:remove_new_method) { }
+    method.replace_instance_method(:reset_mocha) {}
     method.define_instance_accessor(:restore_called)
     method.replace_instance_method(:restore_original_method) { self.restore_called = true }
 
