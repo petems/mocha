@@ -38,17 +38,20 @@ module Mocha
     end
 
     def hide_original_method
-      if @original_visibility = method_visibility(method)
+      if method_exists?(method)
         begin
           @original_method = stubbee._method(method)
-          if RUBY_V2_PLUS
-            @definition_target = PrependedModule.new
-            stubbee.__metaclass__.__send__ :prepend, @definition_target
-          else
-            if @original_method && @original_method.owner == stubbee.__metaclass__
-              stubbee.__metaclass__.send(:remove_method, method)
-            end
+          @original_visibility = :public
+          if stubbee.__metaclass__.protected_instance_methods.include?(method)
+            @original_visibility = :protected
+          elsif stubbee.__metaclass__.private_instance_methods.include?(method)
+            @original_visibility = :private
           end
+          if @original_method && @original_method.owner == stubbee.__metaclass__
+            stubbee.__metaclass__.send(:remove_method, method)
+          end
+
+          include_prepended_module if RUBY_V2_PLUS
         rescue NameError
           # deal with nasties like ActiveRecord::Associations::AssociationProxy
         end
@@ -99,13 +102,12 @@ module Mocha
       "#{stubbee}.#{method}"
     end
 
-    def method_visibility(method)
+    def method_exists?(method)
       symbol = method.to_sym
-      metaclass = stubbee.__metaclass__
-
-      (metaclass.public_method_defined?(symbol) && :public) ||
-        (metaclass.protected_method_defined?(symbol) && :protected) ||
-        (metaclass.private_method_defined?(symbol) && :private)
+      __metaclass__ = stubbee.__metaclass__
+      __metaclass__.public_method_defined?(symbol) ||
+        __metaclass__.protected_method_defined?(symbol) ||
+        __metaclass__.private_method_defined?(symbol)
     end
 
     private
